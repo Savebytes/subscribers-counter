@@ -40,9 +40,20 @@ const Odometer = dynamic(import('react-odometerjs'), {
     loading: () => 0
 })
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
 //const { data, error } = useSwer('https://jsonplaceholder.typicode.com/todos/1', fetcher);
 /*
+    useEffect(() => {
+        function callApi(){
+            setOdometerValue(data.followers.data.following_count)
+        }
+        const subs = setInterval(() => {
+            var canCall = false;
+            if(canCall)
+                callApi();
+        }, 3000);
+        return () => clearInterval(subs);
+    })
+
 export async function getServerSideProps(context){
     
     async function getSubs(){
@@ -64,24 +75,41 @@ export async function getServerSideProps(context){
 }
 */
 const Home = () => {
-    const {data, error} = useSwr('/api/followers', fetcher);
+    const [text, setIdText] = useState('');
+    const [avatar, setAvatar] = useState('');
+    //const {data, error} = useSwr('/api/followers/', fetcher);
     const [odometerValue, setOdometerValue] = useState('');
 
-    useEffect(() => {
-        function callApi(){
-            setOdometerValue(data.followers.data.following_count)
+
+  //  if(error) return <div>Failed to request!</div>
+//    if(!data) return <div>Loading...</div>
+    
+    useEffect(()=>{   
+        function callApi() {
+            fetch('http://localhost:3000/api/'+text).then(response => {
+            response.json().then(info => {
+                var subsAmount = info.followers.data.follower_count;
+                var avatar = info.avatar.data.avatar
+                console.log(subsAmount);
+                console.log(avatar);
+                
+                setOdometerValue(subsAmount);
+                setAvatar(avatar)
+            });
+        });
         }
         const subs = setInterval(() => {
-            var canCall = false;
-            if(canCall)
+            var canCall = true;
+            if (canCall)
                 callApi();
         }, 3000);
         return () => clearInterval(subs);
-    })
+    }, [text])
 
-    if(error) return <div>Failed to request!</div>
-    if(!data) return <div>Loading...</div>
-    
+    function onHandleSubmit(){
+
+    }
+
     return (
         <div>
             <GlobalStyles />
@@ -93,8 +121,8 @@ const Home = () => {
                 </div>
                 <div className={styles.searchContainer}>
                     <div className={styles.input}>
-                        <form className={styles.idForm} autoComplete="off">
-                            <input className={styles.inputId} name="id" type="text" placeholder="Enter a CosTV channel ID here" />
+                        <form className={styles.idForm} autoComplete="off" onSubmit={ () => {onHandleSubmit()}}>
+                            <input onChange={e => setIdText(e.target.value)} className={styles.inputId} name="id" type="text" placeholder="Enter a CosTV channel ID here" />
                             <button className={styles.inputSubmit} type="submit"><FaSearch /></button>
                         </form>
                     </div>
@@ -123,11 +151,11 @@ const Home = () => {
                     </div>
                     <div className={styles.userInfo}>
                         <div className={styles.avatarContainer}>
-                            <img className={styles.userAvatar} src={"/profile.png"} ></img>
+                            <img className={styles.userAvatar} src={avatar || "/profile.png"} ></img>
                         </div>
                     </div>
                     <div id={styles.subscribersCount}>
-                        <Odometer duration={2000} value={odometerValue} format="d"></Odometer>
+                        <Odometer duration={2000} value={odometerValue} format="(.ddd).dd"></Odometer>
                     </div>
 
                     <div className={styles.subsDiv}>
