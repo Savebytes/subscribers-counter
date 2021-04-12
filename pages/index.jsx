@@ -86,7 +86,7 @@ const Home = () => {
     
     useEffect(()=>{   
         function callApi() {
-            fetch('http://localhost:3000/api/'+text).then(response => {
+            fetch('https://subscribers-counter.vercel.app/api/'+text).then(response => {
             response.json().then(info => {
                 var subsAmount = info.followers.data.follower_count;
                 var avatar = info.avatar.data.avatar
