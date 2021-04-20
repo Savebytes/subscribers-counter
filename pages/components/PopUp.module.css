@@ -1,0 +1,17 @@
+.popUp{
+	position: fixed;
+	background-color: rgb(80, 206, 55);
+	opacity: 1;
+	transition: opacity 0.8s;
+    margin: 5px;
+    padding: 23px;
+	right: 0;
+    bottom: 0px;
+	border-radius: 10px;
+	box-shadow: 2px 10px 18px 3px black;
+	cursor: pointer;
+}
+
+.popUp:hover{
+	background-color: rgb(68, 175, 46);
+}

@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {useRouter} from 'next/router'
-import Link from 'next/link'
 import styles from './styles/Index.module.css'
 import dynamic from 'next/dynamic'
-import { FaSearch } from 'react-icons/fa'
-import { GiHamburgerMenu } from 'react-icons/gi'
-import useSwr from 'swr'
+import PopUp from './components/PopUp'
+import Header from './components/Header'
 /*
 const headerStyle = {
     'background-image': 'linear-gradient(260deg, #1f2121 0%, #000000 100%)',
@@ -39,14 +36,6 @@ const Odometer = dynamic(import('react-odometerjs'), {
     ssr: false,
     loading: () => 0
 })
-
-const Error = props => {
-    return(
-    <div className={styles.errorAlert}>
-        <div>{props.errorMsg}</div>
-    </div>
-    )
-}
 
 //const { data, error } = useSwer('https://jsonplaceholder.typicode.com/todos/1', fetcher);
 /*
@@ -88,7 +77,7 @@ const Home = () => {
     const [avatar, setAvatar] = useState('');
     const [odometerValue, setOdometerValue] = useState(10000);
     const [timer, setTimer] = useState(null);
-    const [open, setOpen] = useState(null);
+
 
   //  if(error) return <div>Failed to request!</div>
 //    if(!data) return <div>Loading...</div>
@@ -97,90 +86,10 @@ const Home = () => {
         //return () => clearInterval(subs);
     })
 
-    function onHandleSubmit(event){
-        event.preventDefault();
-        const url = window.location.origin+'/api/'+textId;
-        
-        var canCall = true;
-        function callApi() {
-            if(!canCall) return;
-            
-            if(textId == ""){
-                setErrorMsg("Porfavor, específique um id!");
-                return;
-            }
-            else if(textId.length != 17){
-                setErrorMsg("O id precisa de 17 caracteres!" + "\n" + textId.length + "/17");
-                return;
-            }else{
-                setErrorMsg("Carregando perfil...");
-            }
-            fetch(url).then(response => {
-            response.json().then(info => {
-                var subsAmount = info.followers.data.follower_count;
-                var avatar = info.avatar.data.avatar
-                console.log("Subs: "+subsAmount);                
-                
-                if(subsAmount != null){
-                    setOdometerValue(subsAmount);
-                }
-                
-                if(avatar != null && avatar != ""){
-                    setAvatar(avatar)
-                }else{
-                    console.log("Avatar não carregado!");
-                }
-                setErrorMsg("Carregado com sucesso!");
-            });
-        });
-        }
-        if(!timer){
-            setTimer(setInterval(callApi, 4000));
-            console.log("Timer criado com sucesso!");
-        }else{
-            setTimer(clearInterval(timer));
-            setTimer(setInterval(callApi, 4000));
-            console.warn("timer reiniciado " + timer);
-        }
-    }
-
     return (
         <div>
-            <header className={styles.header}>
-                <div className={styles.navBar}>
-                    <Link href="/">
-                        <a className={styles.logo}>Realtime Subscribers</a>
-                    </Link>
-                </div>
-                <div className={styles.searchContainer}>
-                    <div className={styles.input}>
-                        <form className={styles.idForm} autoComplete="off" onSubmit={ (e) => {onHandleSubmit(e)}}>
-                            <input maxLength="17" onChange={e => setIdText(e.target.value)} title="Search" className={styles.inputId} name="id" type="text" placeholder="Enter a CosTV channel ID here" />
-                            <button className={styles.inputSubmit} aria-label="Search" title="Search id" type="submit"><FaSearch /></button>
-                        </form>
-                    </div>
-                </div>
-                <Error errorMsg={errorMsg}></Error>
-                <div className={styles.rightNavBar}>
-                    <ul className={styles.mainNav}>
-                        <li className={styles.mainLi}>
-                            <a className={styles.navLinks}>Home</a>
-                        </li>
-                        <li className={styles.mainLi}>
-                            <Link href="/about">
-                                <a className={styles.navLinks}>About</a>
-                            </Link>
-                        </li>
-                    </ul>
-                    <a className={styles.closeButton} onClick={()=> setOpen(!open)} ><GiHamburgerMenu/></a>
-                    <div className={open? styles.sideNav : styles.sideNavClose}>
-                        <a href="#1">Home</a>
-                        <a href="#2">Services</a>
-                        <a href="#3">Prices</a>
-                        <a href="#4">About Us</a>
-                    </div>
-                </div>
-            </header>
+            <Header/>
+            <PopUp errorMsg={errorMsg}/>
             <section className={styles.main}>
                 <div className={styles.container}>
                     <div className={styles.loading}>
