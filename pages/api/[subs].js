@@ -3,9 +3,13 @@ export default async function handler(req, res){
     var {subs} = req.query;
     async function getSubs(){
         var url = 'https://cos.tv/api/v1/feed/video_user/others_follow_statistic?fuid=' + subs;
-
         const result = await fetch(url)
-        return (await result).json()
+        try {
+            return (await result).json()
+        } catch (error) {
+            throw new Error("Error, invalid json.");
+        }
+
         //var followers = data.data.follower_count;
     }
     async function getAvatar(){

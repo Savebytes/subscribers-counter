@@ -1,0 +1,57 @@
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+html, body, #root {
+    height: 100%;
+}
+
+body {
+    margin: 0 auto;
+    background-color: #1d1d1f;
+    color: white;
+}
+
+*, button, input {
+    border: 0;
+    font-family: 'Work Sans', sans-serif;
+}
+
+::-webkit-scrollbar{
+    width: 13px;
+    background: black;
+}
+
+::-webkit-scrollbar-track{
+    background: rgb(36, 35, 35);
+}
+
+::-webkit-scrollbar-thumb{
+    background: rgb(117, 117, 117);
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background: rgb(97, 97, 97);
+}
+
+::-webkit-scrollbar-button{
+    width: 30px;
+    height: 20px;
+    background: gray;
+    border-bottom: 1px solid #555;
+    border-top: 1px solid #555;
+}
+
+::-webkit-scrollbar-button:start
+{
+    background-image: url(https://i.imgur.com/Z6TVXLs.png);
+    background-size: cover;
+}
+::-webkit-scrollbar-button:end
+{
+    background-image: url(https://imgur.com/92p4ZFD.png);
+    background-size: cover;
+}
