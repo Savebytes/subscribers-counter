@@ -6,50 +6,53 @@ import { GiHamburgerMenu } from 'react-icons/gi'
 
 function Header(props){
     const [open, setOpen] = useState(null);
-
-    function onHandleSubmit(event){
+    const [timer, setTimer] = useState(null);
+    const [errorMsg, setErrorMsg] = useState('Error message.');
+    
+    function handleSubmit(event){
         event.preventDefault();
-        const url = window.location.origin+'/api/'+textId;
         
         var canCall = true;
         function callApi() {
             if(!canCall) return;
             
-            if(textId == ""){
+            if(props.textId == ""){
                 setErrorMsg("Porfavor, específique um id!");
                 return;
             }
-            else if(textId.length != 17){
+            else if(props.textId.length != 17){
                 setErrorMsg("O id precisa de 17 caracteres!" + "\n" + textId.length + "/17");
                 return;
             }else{
                 setErrorMsg("Carregando perfil...");
             }
-            fetch(url).then(response => {
+            fetch("api/" + props.textId).then(response => {
             response.json().then(info => {
                 var subsAmount = info.followers.data.follower_count;
-                var avatar = info.avatar.data.avatar
-                console.log("Subs: "+subsAmount);                
+                var avatar = info.avatar.data.avatar;
+
+                console.log("Subs: "+ avatar);                
                 
                 if(subsAmount != null){
-                    setOdometerValue(subsAmount);
+                    props.setOdometerValue(subsAmount);
+                    props.setAvatar(avatar)
+                    props.setIdText(props.textId);
+                    return;
                 }
                 
-                if(avatar != null && avatar != ""){
-                    setAvatar(avatar)
-                }else{
-                    console.log("Avatar não carregado!");
-                }
+                console.log("Avatar não carregado!");
                 setErrorMsg("Carregado com sucesso!");
             });
         });
         }
         if(!timer){
-            setTimer(setInterval(callApi, 4000));
+            callApi();
+            setTimer(setInterval(callApi, 8000));
             console.log("Timer criado com sucesso!");
         }else{
+            callApi();
             setTimer(clearInterval(timer));
-            setTimer(setInterval(callApi, 4000));
+            setTimer(setInterval(callApi, 8000));
             console.warn("timer reiniciado " + timer);
         }
     }
@@ -61,10 +64,10 @@ function Header(props){
                     <a className={styles.logo}>Realtime Subscribers</a>
                 </Link>
             </div>
-            <div className={styles.searchContainer}>
-                <div className={styles.input}>
-                    <form className={styles.idForm} autoComplete="off" onSubmit={(e) => { onHandleSubmit(e) }}>
-                        <input maxLength="17" onChange={e => setIdText(e.target.value)} title="Search" className={styles.inputId} name="id" type="text" placeholder="Enter a CosTV channel ID here" />
+            <div className={styles.searchContainer}>    
+                <div className={styles.input}>  
+                    <form className={styles.idForm} autoComplete="off" onSubmit={(e) => { handleSubmit(e) }}>
+                        <input maxLength="17" onChange={e => props.setIdText(e.target.value)} title="Search" className={styles.inputId} name="id" type="text" placeholder="Enter a CosTV channel ID here" />
                         <button className={styles.inputSubmit} aria-label="Search" title="Search id" type="submit"><FaSearch /></button>
                     </form>
                 </div>

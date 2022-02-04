@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import styles from './styles/Index.module.css'
-import dynamic from 'next/dynamic'
 import PopUp from './components/PopUp'
 import Header from './components/Header'
+import Section from './components/Section'
 /*
 const headerStyle = {
     'background-image': 'linear-gradient(260deg, #1f2121 0%, #000000 100%)',
@@ -31,11 +30,6 @@ const navLinks = {
     'display': 'none'
 }
 */
-
-const Odometer = dynamic(import('react-odometerjs'), {
-    ssr: false,
-    loading: () => 0
-})
 
 //const { data, error } = useSwer('https://jsonplaceholder.typicode.com/todos/1', fetcher);
 /*
@@ -72,53 +66,33 @@ export async function getServerSideProps(context){
 }
 */
 const Home = () => {
-    const [textId, setIdText] = useState('');
+    const [textId, setTextId] = useState('');
+    const [avatar, setAvatar] = useState("/profile.png");
+    const [odometerValue, setOdometerValue] = useState(100);
     const [errorMsg, setErrorMsg] = useState('Error message.')
-    const [avatar, setAvatar] = useState('');
-    const [odometerValue, setOdometerValue] = useState(10000);
-    const [timer, setTimer] = useState(null);
 
-
-  //  if(error) return <div>Failed to request!</div>
-//    if(!data) return <div>Loading...</div>
-    
     useEffect(()=>{           
         //return () => clearInterval(subs);
     })
 
     return (
         <div>
-            <Header/>
+            <Header 
+            odometerValue={odometerValue}
+            setOdometerValue={setOdometerValue}
+            setAvatar={setAvatar}
+            textId={textId}
+            setIdText={setTextId}
+            />
+            <Section 
+            odometerValue={odometerValue} 
+            setOdometerValue={setOdometerValue} 
+            avatar={avatar} 
+            textId={textId}
+            />
             <PopUp errorMsg={errorMsg}/>
-            <section className={styles.main}>
-                <div className={styles.container}>
-                    <div className={styles.loading}>
-                        <div className={styles.spinner} />
-                    </div>
-                    <div className={styles.userInfo}>
-                        <div className={styles.avatarContainer}>
-                            <img className={styles.userAvatar} src={avatar || "/profile.png"} alt="Profile picture"></img>
-                        </div>
-                    </div>
-                    <div id={styles.subscribersCount}>
-                        <Odometer duration={2000} value={odometerValue} format="(.ddd).dd"></Odometer>
-                    </div>
-
-                    <div className={styles.subsDiv}>
-                        <a className={styles.subsDivBtn} aria-label="Search" href={'https://cos.tv/channel/'+textId} target="_blank">Subscribe</a>
-                    </div>
-                </div>
-            </section>
         </div>
     )
 }
 
 export default Home
-
-//use state
-//<button onClick={this.onButtonClicked}>CLICA</button>
-/*    onButtonClicked = () => {
-        console.log("cu3")
-        this.setState({ odometerValue: 1000 })
-    }
-*/

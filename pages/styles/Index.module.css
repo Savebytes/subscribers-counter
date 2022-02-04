@@ -48,7 +48,7 @@ header > h3 {
 	width: 100%;
 	transition: ease all 0.5s;
     border-radius: 5px;
-    box-shadow: 7px 6px 8px #00000078;
+    box-shadow: 0px 6px 8px #00000078;
 }
 
 .active {
