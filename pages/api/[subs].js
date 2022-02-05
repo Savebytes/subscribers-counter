@@ -21,7 +21,11 @@ export default async function handler(req, res){
     }
     var followers = await getSubs();
     var avatarImage = await getAvatar();
-    res.status(200).json({'followers':followers, 'avatar':avatarImage});
+    
+    res.status(200).json({
+        'followers':followers, 
+        'avatar':avatarImage
+    });
 }
 
 /*

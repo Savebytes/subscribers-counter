@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import Link from 'next/link'
 import styles from './Header.module.css'
-import { FaSearch } from 'react-icons/fa'
+import { ImSearch } from 'react-icons/im'
 import { GiHamburgerMenu } from 'react-icons/gi'
 
 function Header(props){
@@ -68,22 +68,27 @@ function Header(props){
                 <div className={styles.input}>  
                     <form className={styles.idForm} autoComplete="off" onSubmit={(e) => { handleSubmit(e) }}>
                         <input maxLength="17" onChange={e => props.setIdText(e.target.value)} title="Search" className={styles.inputId} name="id" type="text" placeholder="Enter a CosTV channel ID here" />
-                        <button className={styles.inputSubmit} aria-label="Search" title="Search id" type="submit"><FaSearch /></button>
+                        <button className={styles.inputSubmit} aria-label="Search" title="Search id" type="submit"><ImSearch size={16}/></button>
                     </form>
                 </div>
             </div>
             <div className={styles.rightNavBar}>
                 <ul className={styles.mainNav}>
-                    <li className={styles.mainLi}>
-                        <a className={styles.navLinks}>Home</a>
-                    </li>
+                        <li className={styles.mainLi}>
+                        <Link href="/home">
+                            <a className={styles.navLinks}>Home</a>
+                            </Link>
+                        </li>
                     <li className={styles.mainLi}>
                         <Link href="/about">
                             <a className={styles.navLinks}>About</a>
                         </Link>
                     </li>
                 </ul>
-                <a className={styles.closeButton} onClick={() => setOpen(!open)} ><GiHamburgerMenu /></a>
+                <div className={styles.buttonsWrap}>
+                    <a className={styles.closeButton} onClick={() => setOpen(!open)} ><GiHamburgerMenu /></a>
+                    <a className={styles.searchButton}><ImSearch /></a>
+                </div>
                 <div className={open ? styles.sideNav : styles.sideNavClose}>
                     <a href="#1">Home</a>
                     <a href="#2">Services</a>
