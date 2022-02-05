@@ -66,7 +66,7 @@ export async function getServerSideProps(context){
 }
 */
 const Home = () => {
-    const [textId, setTextId] = useState('');
+    const [textId, setTextId] = useState('14055021959882752');
     const [avatar, setAvatar] = useState("/profile.png");
     const [odometerValue, setOdometerValue] = useState(100);
     const [errorMsg, setErrorMsg] = useState('Error message.')

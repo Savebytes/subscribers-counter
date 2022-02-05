@@ -61,6 +61,8 @@ header > h3 {
 	border: 5px solid #f9f9f9;
 	background: #fff;
 	border-radius: 50%;
+
+	cursor: pointer;
 }
 
 .avatarContainer {

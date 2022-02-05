@@ -16,7 +16,9 @@ function Section(props){
                 </div>
                 <div className={styles.userInfo}>
                     <div className={styles.avatarContainer}>
-                        <img className={styles.userAvatar} src={props.avatar} alt="Profile picture"></img>
+                        <a href={'https://cos.tv/channel/' + props.textId}>
+                            <img className={styles.userAvatar} src={props.avatar} alt="Profile picture"></img>
+                        </a>
                     </div>
                 </div>
                 <div id={styles.subscribersCount}>
