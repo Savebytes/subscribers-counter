@@ -26,7 +26,7 @@ function Section(props){
                 </div>
 
                 <div className={styles.subsDiv}>
-                    <a className={styles.subsDivBtn} aria-label="Search" href={'https://cos.tv/channel/' + props.textId} target="_blank">Subscribe</a>
+                    <a className={styles.subsDivBtn} aria-label="Search" href={'https://cos.tv/channel/' + props.textId}>Subscribe</a>
                 </div>
             </div>
         </section>

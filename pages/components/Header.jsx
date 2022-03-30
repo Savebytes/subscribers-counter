@@ -12,26 +12,21 @@ function Header(props){
     function handleSubmit(event){
         event.preventDefault();
         
-        var canCall = true;
-        function callApi() {
-            if(!canCall) return;
-            
+        function callApi() {  
             if(props.textId == ""){
-                setErrorMsg("Porfavor, específique um id!");
+                setErrorMsg("Por favor, específique um id!");
                 return;
             }
             else if(props.textId.length != 17){
-                setErrorMsg("O id precisa de 17 caracteres!" + "\n" + textId.length + "/17");
+                setErrorMsg("O id precisa ser 17 caracteres!" + "\n" + props.textId.length + "/17");
                 return;
             }else{
                 setErrorMsg("Carregando perfil...");
             }
             fetch("api/" + props.textId).then(response => {
             response.json().then(info => {
-                var subsAmount = info.followers.data.follower_count;
-                var avatar = info.avatar.data.avatar;
-
-                console.log("Subs: "+ avatar);                
+                var subsAmount = info.followers;
+                var avatar = info.avatar;           
                 
                 if(subsAmount != null){
                     props.setOdometerValue(subsAmount);

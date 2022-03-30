@@ -2,6 +2,39 @@ import React, { useState, useEffect } from "react";
 import PopUp from './components/PopUp'
 import Header from './components/Header'
 import Section from './components/Section'
+
+const Home = () => {
+    const [textId, setTextId] = useState('14055021959882752');
+    const [avatar, setAvatar] = useState("/profile.png");
+    const [odometerValue, setOdometerValue] = useState(100);
+    const [errorMsg, setErrorMsg] = useState('Error message.')
+
+    useEffect(()=>{           
+        //return () => clearInterval(subs);
+    })
+
+    return (
+        <div>
+            <Header 
+            odometerValue={odometerValue}
+            setOdometerValue={setOdometerValue}
+            setAvatar={setAvatar}
+            textId={textId}
+            setIdText={setTextId}
+            />
+            <Section 
+            odometerValue={odometerValue} 
+            setOdometerValue={setOdometerValue} 
+            avatar={avatar} 
+            textId={textId}
+            />
+            <PopUp errorMsg={errorMsg}/>
+        </div>
+    )
+}
+
+export default Home
+
 /*
 const headerStyle = {
     'background-image': 'linear-gradient(260deg, #1f2121 0%, #000000 100%)',
@@ -65,34 +98,3 @@ export async function getServerSideProps(context){
     }
 }
 */
-const Home = () => {
-    const [textId, setTextId] = useState('14055021959882752');
-    const [avatar, setAvatar] = useState("/profile.png");
-    const [odometerValue, setOdometerValue] = useState(100);
-    const [errorMsg, setErrorMsg] = useState('Error message.')
-
-    useEffect(()=>{           
-        //return () => clearInterval(subs);
-    })
-
-    return (
-        <div>
-            <Header 
-            odometerValue={odometerValue}
-            setOdometerValue={setOdometerValue}
-            setAvatar={setAvatar}
-            textId={textId}
-            setIdText={setTextId}
-            />
-            <Section 
-            odometerValue={odometerValue} 
-            setOdometerValue={setOdometerValue} 
-            avatar={avatar} 
-            textId={textId}
-            />
-            <PopUp errorMsg={errorMsg}/>
-        </div>
-    )
-}
-
-export default Home
