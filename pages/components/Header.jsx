@@ -112,9 +112,7 @@ function Header(props){
                 </div>
                 <div className={open ? styles.sideNav : styles.sideNavClose}>
                     <a href="#1">Home</a>
-                    <a href="#2">Services</a>
-                    <a href="#3">Prices</a>
-                    <a href="#4">About Us</a>
+                    <a href="#4">About</a>
                 </div>
             </div>
         </header>
