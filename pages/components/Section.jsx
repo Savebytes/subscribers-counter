@@ -11,7 +11,7 @@ function Section(props){
     return(
         <section className={styles.main}>
             <div className={styles.container}>
-                <div className={styles.loading}>
+                <div className={`${styles.loading} ${props.fetchInProgress === true ? '' : styles.hide}`}>
                     <div className={styles.spinner} />
                 </div>
                 <div className={styles.userInfo}>

@@ -2,10 +2,40 @@
 import createSubsData from "./subs-data.js";
 import createAvatarData from "./avatar-data.js";
 
+export default async function handler(req, res){
+    let {id} = req.query;
+
+    const mockSubs = createSubsData();
+    const mockAvatar = createAvatarData();
+
+    const data = fetchData({
+        id: id,
+        subs: mockSubs,
+        avatar: mockAvatar
+    });
+
+    let followers = await data.getSubs();
+    let avatarImage = await data.getAvatar();
+
+    console.log("inscritos:" + followers);
+    
+    // setTimeout(()=>{
+        
+
+    // }, 2000);
+    res.status(200).json({
+        'followers':followers,
+        'avatar':avatarImage
+    });
+}
+
 function mockSubsData(){
+    let fakeSubs = 0;
     function getSubs(id){
         console.log('[mock] Getting subs count...');
-        return (Math.floor(Math.random() * 10 + 1));
+        fakeSubs = new Date().getSeconds();
+
+        return fakeSubs;
     }
 
     return{
@@ -22,29 +52,6 @@ function mockAvatarData(){
     return{
         getAvatar
     }
-}
-
-export default async function handler(req, res){
-    let {id} = req.query;
-
-    const mockSubs = mockSubsData();
-    const mockAvatar = mockAvatarData();
-
-    const data = fetchData({
-        id: id,
-        subs: mockSubs,
-        avatar: mockAvatar
-    });
-
-    let followers = await data.getSubs();
-    let avatarImage = await data.getAvatar();
-
-    console.log("inscritos:" + followers);
-    
-    res.status(200).json({
-        'followers':followers,
-        'avatar':avatarImage
-    });
 }
 
 function fetchData(configurations = {}){

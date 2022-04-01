@@ -14,13 +14,16 @@ function Header(props){
     function handleSubmit(event){
         event.preventDefault();
         
+        props.setFetch(true);
         function callApi() {  
             if(props.textId == ""){
                 setErrorMsg("Por favor, específique um id!");
+                props.setFetch(false);
                 return;
             }
             else if(props.textId.length != 17){
                 setErrorMsg("O id precisa ser 17 caracteres!" + "\n" + props.textId.length + "/17");
+                props.setFetch(false);
                 return;
             }else{
                 setErrorMsg("Carregando perfil...");
@@ -34,11 +37,13 @@ function Header(props){
                     props.setOdometerValue(subsAmount);
                     props.setAvatar(avatar)
                     props.setIdText(props.textId);
+                    props.setFetch(false);
                     return;
                 }
                 
                 console.log("Avatar não carregado!");
                 setErrorMsg("Carregado com sucesso!");
+                props.setFetch(false);
             });
         });
         }
@@ -54,6 +59,9 @@ function Header(props){
         }
     }
 
+    // todo: fix search bar when browser resize 
+    // (the bar disappears because of searchOpen)
+
     return(
         <header className={styles.header}>
             <div className={styles.navBar}>
@@ -62,13 +70,24 @@ function Header(props){
                 </Link>
             </div>
 
-            {searchOpen && 
-            <div className={styles.searchContainer}>    
+            <div className={`${styles.searchContainer} ${styles.desktop}`}>
                 <div className={styles.input}>  
-                    <form className={styles.idForm} autoComplete="off" onSubmit={(e) => { handleSubmit(e) }}>
+                    <form className={styles.idForm} autoComplete="on" onSubmit={(e) => { handleSubmit(e) }}>
                         <input maxLength="17" onChange={e => props.setIdText(e.target.value)} title="Search" className={styles.inputId} name="id" type="text" placeholder="Enter a CosTV channel ID here" />
+                        <button className={`${styles.inputSubmit} ${styles.desktop}`} aria-label="Search" title="Search id" type="submit"><ImSearch size={24}/></button>
+                    </form>
+                </div>
+            </div>
+
+            {searchOpen &&
+            <div className={`${styles.searchContainer} ${styles.mobile}`}>
+                <div className={styles.input}>  
+                    <form className={styles.idForm} autoComplete="on" onSubmit={(e) => { handleSubmit(e) }}>
+                        <input maxLength="17" onChange={(e) => {
+                            props.setIdText(e.target.value);
+                        }} title="Search" className={styles.inputId} name="id" type="text" placeholder="Enter a CosTV channel ID here" />
                         <button className={styles.inputSubmit} aria-label="Search" title="Search id" type="submit"><ImSearch size={24}/></button>
-                        <button className={styles.inputClose} onClick={() => setSearchOpen(!searchOpen)} aria-label="Search" title="Search id" type="button"><CgClose size={32}/></button>
+                        <button className={styles.inputClose} onClick={() => setSearchOpen(!searchOpen)} aria-label="Search" title="Search by id" type="button"><CgClose size={32}/></button>
                     </form>
                 </div>
             </div>

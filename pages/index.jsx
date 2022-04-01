@@ -4,14 +4,15 @@ import Header from './components/Header'
 import Section from './components/Section'
 
 const Home = () => {
-    const [textId, setTextId] = useState('14055021959882752');
+    const [textId, setTextId] = useState("14055021959882752");
     const [avatar, setAvatar] = useState("/profile.png");
     const [odometerValue, setOdometerValue] = useState(100);
-    const [errorMsg, setErrorMsg] = useState('Error message.')
+    const [errorMsg, setErrorMsg] = useState("Error message.")
+    const [fetchInProgress, setFetch] = useState(false);
 
     useEffect(()=>{           
         //return () => clearInterval(subs);
-    })
+    }, [])
 
     return (
         <div>
@@ -21,14 +22,15 @@ const Home = () => {
             setAvatar={setAvatar}
             textId={textId}
             setIdText={setTextId}
+            setFetch={setFetch}
             />
             <Section 
-            odometerValue={odometerValue} 
-            setOdometerValue={setOdometerValue} 
-            avatar={avatar} 
+            odometerValue={odometerValue}
+            avatar={avatar}
             textId={textId}
+            fetchInProgress={fetchInProgress}
             />
-            <PopUp errorMsg={errorMsg}/>
+            {/* <PopUp errorMsg={errorMsg}/> */}
         </div>
     )
 }
