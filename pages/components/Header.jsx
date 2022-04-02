@@ -1,39 +1,50 @@
 import React, {useState} from 'react';
+import { useRef } from 'react'
 import Link from 'next/link'
 import styles from './Header.module.css'
 import { ImSearch } from 'react-icons/im'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { CgClose } from 'react-icons/cg'
+import { BiError } from 'react-icons/bi'
 
 function Header(props){
     const [open, setOpen] = useState(null);
-    const [timer, setTimer] = useState(null);
-    const [errorMsg, setErrorMsg] = useState('Error message.');
+    const timer = useRef(null);
+    const popupRef = useRef(null);
     const [searchOpen, setSearchOpen] = useState(false);
+    const [messagePopup, setMessagePopup] = useState({
+        active: false
+    });
+    const [errorText, setErrorText] = useState("This a error example.");
+
+    const timeBetweenFetch = 8 * 1000;
     
     function handleSubmit(event){
         event.preventDefault();
         
         props.setFetch(true);
+
         function callApi() {  
             if(props.textId == ""){
-                setErrorMsg("Por favor, específique um id!");
                 props.setFetch(false);
+                setErrorText("O id de usuário não pode estar vazio.");
+                setMessagePopup({active: true});
+                stopTimer();
                 return;
             }
             else if(props.textId.length != 17){
-                setErrorMsg("O id precisa ser 17 caracteres!" + "\n" + props.textId.length + "/17");
                 props.setFetch(false);
+                setErrorText("O id de usuário precisa ter 17 números.");
+                setMessagePopup({active: true});
+                stopTimer();
                 return;
-            }else{
-                setErrorMsg("Carregando perfil...");
             }
             fetch("api/" + props.textId).then(response => {
             response.json().then(info => {
                 var subsAmount = info.followers;
                 var avatar = info.avatar;           
                 
-                if(subsAmount != null){
+                if(avatar != null){
                     props.setOdometerValue(subsAmount);
                     props.setAvatar(avatar)
                     props.setIdText(props.textId);
@@ -41,39 +52,51 @@ function Header(props){
                     return;
                 }
                 
-                console.log("Avatar não carregado!");
-                setErrorMsg("Carregado com sucesso!");
+                console.log("[client] Error usuario n encotnrado...");
+                setErrorText("O id de usuário '" + props.textId + "' não foi encontrado, por favor verifique se ele está correto e tente novamente.");
+                setMessagePopup({active: true});
+                stopTimer();
                 props.setFetch(false);
             });
         });
         }
-        if(!timer){
-            callApi();
-            setTimer(setInterval(callApi, 8000));
-            console.log("Timer criado com sucesso!");
-        }else{
-            callApi();
-            setTimer(clearInterval(timer));
-            setTimer(setInterval(callApi, 8000));
-            console.warn("timer reiniciado " + timer);
-        }
+        
+        stopTimer();
+        startTimer(callApi);
+
+        callApi();
+    }
+    
+    function startTimer(callback) {
+        console.log("[client] Start timer...");
+        timer.current = setInterval(() => {
+            callback();
+        }, timeBetweenFetch);
     }
 
-    // todo: fix search bar when browser resize 
-    // (the bar disappears because of searchOpen)
+    function stopTimer() {
+        console.log("[client] Stop timer: " + timer.current);
+        clearInterval(timer.current);
+    }
+
+    function handleClickInside(e) {
+        if(!popupRef.current.contains(e.target)){
+            setMessagePopup({active: false});
+        }
+    }
 
     return(
         <header className={styles.header}>
             <div className={styles.navBar}>
                 <Link href="/">
-                    <a className={styles.logo}>Realtime Subscribers</a>
+                    <a className={styles.logo}>Realtime Subscribers (Beta)</a>
                 </Link>
             </div>
 
             <div className={`${styles.searchContainer} ${styles.desktop}`}>
                 <div className={styles.input}>  
                     <form className={styles.idForm} autoComplete="on" onSubmit={(e) => { handleSubmit(e) }}>
-                        <input maxLength="17" onChange={e => props.setIdText(e.target.value)} title="Search" className={styles.inputId} name="id" type="text" placeholder="Enter a CosTV channel ID here" />
+                        <input maxLength={17} onChange={e => props.setIdText(e.target.value)} title="Search" className={styles.inputId} name="id" type="text" placeholder="Enter a CosTV channel ID here"/>
                         <button className={`${styles.inputSubmit} ${styles.desktop}`} aria-label="Search" title="Search id" type="submit"><ImSearch size={24}/></button>
                     </form>
                 </div>
@@ -83,7 +106,7 @@ function Header(props){
             <div className={`${styles.searchContainer} ${styles.mobile}`}>
                 <div className={styles.input}>  
                     <form className={styles.idForm} autoComplete="on" onSubmit={(e) => { handleSubmit(e) }}>
-                        <input maxLength="17" onChange={(e) => {
+                        <input maxLength={17} onChange={(e) => {
                             props.setIdText(e.target.value);
                         }} title="Search" className={styles.inputId} name="id" type="text" placeholder="Enter a CosTV channel ID here" />
                         <button className={styles.inputSubmit} aria-label="Search" title="Search id" type="submit"><ImSearch size={24}/></button>
@@ -96,12 +119,12 @@ function Header(props){
             <div className={styles.rightNavBar}>
                 <ul className={styles.mainNav}>
                         <li className={styles.mainLi}>
-                        <Link href="/home">
+                        <Link href="/#home">
                             <a className={styles.navLinks}>Home</a>
                             </Link>
                         </li>
                     <li className={styles.mainLi}>
-                        <Link href="/about">
+                        <Link href="/#about">
                             <a className={styles.navLinks}>About</a>
                         </Link>
                     </li>
@@ -115,7 +138,21 @@ function Header(props){
                     <a href="#4">About</a>
                 </div>
             </div>
+
+            
+            <div className={`${styles.errorMessageContainer} ${messagePopup.active ? '' : styles.hidePopup}`} onClick={(e)=>handleClickInside(e)}>
+                <div className={styles.errorBox} ref={popupRef}>
+                    <BiError size={100}></BiError>
+                    <h1>Error</h1>
+                    <p>{errorText}</p>
+                    <button className={styles.buttonConfirmation} onClick={(e) => {
+                        setMessagePopup({active: false});
+                    }}>OK</button>
+                </div>
+            </div>
+            
         </header>
+
     );
 }
 

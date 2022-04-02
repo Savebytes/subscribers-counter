@@ -17,12 +17,13 @@ export default async function handler(req, res){
     let followers = await data.getSubs();
     let avatarImage = await data.getAvatar();
 
-    console.log("inscritos:" + followers);
+    console.log("avatar " + avatarImage);
     
     // setTimeout(()=>{
         
 
     // }, 2000);
+
     res.status(200).json({
         'followers':followers,
         'avatar':avatarImage
