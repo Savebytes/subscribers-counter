@@ -42,13 +42,17 @@ function Header(props){
             fetch("api/" + props.textId).then(response => {
             response.json().then(info => {
                 var subsAmount = info.followers;
-                var avatar = info.avatar;           
+                var avatar = info.userData.avatar;
+                var nickname = info.userData.nickname;           
                 
                 if(avatar != null){
                     props.setOdometerValue(subsAmount);
                     props.setAvatar(avatar)
                     props.setIdText(props.textId);
                     props.setFetch(false);
+                    props.setNickname(nickname);
+
+                    console.log(info);
                     return;
                 }
                 
@@ -65,6 +69,8 @@ function Header(props){
         startTimer(callApi);
 
         callApi();
+
+        setSearchOpen(false);
     }
     
     function startTimer(callback) {
@@ -96,7 +102,7 @@ function Header(props){
             <div className={`${styles.searchContainer} ${styles.desktop}`}>
                 <div className={styles.input}>  
                     <form className={styles.idForm} autoComplete="on" onSubmit={(e) => { handleSubmit(e) }}>
-                        <input maxLength={17} onChange={e => props.setIdText(e.target.value)} title="Search" className={styles.inputId} name="id" type="text" placeholder="Enter a CosTV channel ID here"/>
+                        <input maxLength={50} onChange={e => props.setIdText(e.target.value)} title="Search" className={styles.inputId} name="id" type="text" placeholder="Enter a CosTV channel ID here"/>
                         <button className={`${styles.inputSubmit} ${styles.desktop}`} aria-label="Search" title="Search id" type="submit"><ImSearch size={24}/></button>
                     </form>
                 </div>
@@ -106,7 +112,7 @@ function Header(props){
             <div className={`${styles.searchContainer} ${styles.mobile}`}>
                 <div className={styles.input}>  
                     <form className={styles.idForm} autoComplete="on" onSubmit={(e) => { handleSubmit(e) }}>
-                        <input maxLength={17} onChange={(e) => {
+                        <input maxLength={50} onChange={(e) => {
                             props.setIdText(e.target.value);
                         }} title="Search" className={styles.inputId} name="id" type="text" placeholder="Enter a CosTV channel ID here" />
                         <button className={styles.inputSubmit} aria-label="Search" title="Search id" type="submit"><ImSearch size={24}/></button>
@@ -150,9 +156,7 @@ function Header(props){
                     }}>OK</button>
                 </div>
             </div>
-            
         </header>
-
     );
 }
 

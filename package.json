@@ -30,6 +30,7 @@
     "react-icons": "^4.2.0",
     "react-odometerjs": "^2.1.2",
     "styled-components": "^5.2.3",
-    "swr": "^0.5.5"
+    "swr": "^0.5.5",
+    "use-dark-mode": "^2.3.1"
   }
 }

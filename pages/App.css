@@ -11,9 +11,24 @@ html, body, #root {
 
 body {
     margin: 0 auto;
+
     background-color: #1d1d1f;
     color: white;
 }
+
+p {
+    color: rgb(155, 153, 153);
+}
+/* 
+body.dark-mode {
+    background-color: #1d1d1f;
+    color: white;
+}
+
+body.light-mode {
+    background-color: #ededf3;
+    color: black;
+} */
 
 *, button, input {
     border: 0;

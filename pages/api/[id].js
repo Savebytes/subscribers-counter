@@ -1,32 +1,25 @@
 //id example: 27062571695777792
 import createSubsData from "./subs-data.js";
-import createAvatarData from "./avatar-data.js";
+import createUserData from "./user-data.js";
 
 export default async function handler(req, res){
     let {id} = req.query;
 
     const mockSubs = createSubsData();
-    const mockAvatar = createAvatarData();
+    const mockUserData = createUserData();
 
     const data = fetchData({
         id: id,
         subs: mockSubs,
-        avatar: mockAvatar
+        userData: mockUserData
     });
 
     let followers = await data.getSubs();
-    let avatarImage = await data.getAvatar();
-
-    console.log("avatar " + avatarImage);
-    
-    // setTimeout(()=>{
-        
-
-    // }, 2000);
+    let userData = await data.getUserData();
 
     res.status(200).json({
-        'followers':followers,
-        'avatar':avatarImage
+        followers: followers,
+        userData: userData
     });
 }
 
@@ -58,7 +51,7 @@ function mockAvatarData(){
 function fetchData(configurations = {}){
     const id = configurations.id || 27062571695777792;
     const subsData = configurations.subs || createSubsData();
-    const avatarData = configurations.avatar || createAvatarData();
+    const userData = configurations.userData || createUserData();
 
     async function getSubs(){
         console.log('[data] Getting subs of id: ' + String(id));
@@ -66,14 +59,14 @@ function fetchData(configurations = {}){
         return subsData.getSubs(id);
     }
 
-    async function getAvatar(){
+    async function getUserData(){
         console.log('[data] Getting avatar...');
 
-        return avatarData.getAvatar(id);
+        return userData.getUserData(id);
     }
 
     return {
         getSubs,
-        getAvatar
+        getUserData
     }
 }

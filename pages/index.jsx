@@ -6,6 +6,7 @@ import Section from './components/Section'
 const Home = () => {
     const [textId, setTextId] = useState("14055021959882752");
     const [avatar, setAvatar] = useState("/profile.png");
+    const [nickname, setNickname] = useState('Default nickname');
     const [odometerValue, setOdometerValue] = useState(100);
     const [errorMsg, setErrorMsg] = useState("Error message.")
     const [fetchInProgress, setFetch] = useState(false);
@@ -23,14 +24,15 @@ const Home = () => {
             textId={textId}
             setIdText={setTextId}
             setFetch={setFetch}
+            setNickname={setNickname}
             />
             <Section 
             odometerValue={odometerValue}
             avatar={avatar}
             textId={textId}
             fetchInProgress={fetchInProgress}
+            nickname={nickname}
             />
-            {/* <PopUp errorMsg={errorMsg}/> */}
         </div>
     )
 }
